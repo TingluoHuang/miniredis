@@ -1889,9 +1889,16 @@ func runRangeByLex(m *Miniredis, c *server.Peer, cctx *connCtx, opts optsRangeBy
 		}
 	}
 
-	c.WriteLen(len(members))
+	if opts.WithScores {
+		c.WriteLen(len(members) * 2)
+	} else {
+		c.WriteLen(len(members))
+	}
 	for _, el := range members {
 		c.WriteBulk(el)
+		if opts.WithScores {
+			c.WriteFloat(db.ssetScore(opts.Key, el))
+		}
 	}
 }
 

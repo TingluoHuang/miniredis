@@ -354,6 +354,10 @@ func TestSortedSetRange(t *testing.T) {
 			"ZRANGE", "z", "1", "2", "WITHSCORES",
 			proto.Strings("two", "2", "zwei", "2"),
 		)
+		mustDo(t, c,
+			"ZRANGE", "z", "[t", "[zwei", "BYLEX", "WITHSCORES",
+			proto.Strings("three", "3", "two", "2", "zwei", "2"),
+		)
 		// INF in WITHSCORES
 		mustDo(t, c,
 			"ZRANGE", "z", "4", "-1", "WITHSCORES",
